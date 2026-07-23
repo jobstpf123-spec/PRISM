@@ -230,36 +230,38 @@ function composeFullOptions(item, construct, dept) {
   });
 
   if (construct.startsWith("P")) {
-     // Pull the unique scenarios
-     const wpi = typeof WPI_SCENARIOS !== 'undefined' ? WPI_SCENARIOS[construct] : null;
+     // BAKED-IN 16 UNIQUE PERSONALITY OPTIONS
+     const wpiScenarios = {
+        "P1": { sjt: ["I heavily favor the team workshops to stay energized.", "I split my time but lean toward the group sessions.", "I attend the workshops but prefer working independently.", "I isolate myself to focus entirely on the deep work."], rnk: ["Maximize group collaboration time.", "Balance team meetings with solo work.", "Keep team interactions strictly to required updates.", "Eliminate meetings to focus on independent tasks."] },
+        "P2": { sjt: ["I immediately walk up to strangers and break the ice.", "I look for a small group to introduce myself to.", "I wait for a natural moment to join an ongoing conversation.", "I wait for others to approach me first."], rnk: ["Proactively break the ice with strangers.", "Warmly participate when introduced.", "Observe the group dynamics silently.", "Avoid unnecessary small talk entirely."] },
+        "P3": { sjt: ["I distill it into a sharp, jargon-free executive summary.", "I highlight the main points but keep the technical data ready.", "I walk them through the detailed technical progression.", "I provide all the raw data so they can see exactly what happened."], rnk: ["Deliver a punchy, high-level summary.", "Provide a balanced mix of summary and detail.", "Walk through the full technical timeline.", "Present all raw data and specifications."] },
+        "P4": { sjt: ["I firmly and directly challenge their position with my reasoning.", "I express my concerns politely but look for a compromise.", "I document my disagreement but go along with their decision.", "I quietly accept their decision to avoid creating friction."], rnk: ["Assertively challenge the flawed decision.", "Attempt to negotiate a safer middle ground.", "Formally log my concerns but comply.", "Yield to their authority without arguing."] },
+        "P5": { sjt: ["I immediately focus on the positives and rally the team's energy.", "I acknowledge the hit but pivot quickly to the recovery plan.", "I focus strictly on the cold facts of what went wrong.", "I point out that I expected things to go wrong eventually."], rnk: ["Actively boost the team's morale.", "Pivot immediately to practical recovery.", "Analyze the failure mechanically.", "Express frustration about the wasted effort."] },
+        "P6": { sjt: ["I make a firm judgment call on my own and act immediately.", "I decide on a course of action but briefly notify my manager.", "I draft a proposal and wait for my manager to formally approve it.", "I stop working and immediately escalate it to leadership for a decision."], rnk: ["Take autonomous action immediately.", "Act first, then inform management.", "Propose a fix and wait for approval.", "Halt work and escalate the issue."] },
+        "P7": { sjt: ["I actively challenge the procedure and push to implement a better way.", "I suggest an improvement to the process owner for review.", "I grumble about the inefficiency but follow the rule exactly.", "I strictly obey the procedure without questioning it."], rnk: ["Aggressively push to change the rule.", "Suggest a formal process update.", "Follow the rule while noting its flaws.", "Comply with the standard blindly."] },
+        "P8": { sjt: ["I exhaust every possible workaround and data source myself to figure it out.", "I spend some time digging before asking a colleague.", "I immediately ask my supervisor where to find the data.", "I halt the task entirely until the information is handed to me."], rnk: ["Improvise and exhaust all personal resources.", "Search briefly before asking for help.", "Immediately request guidance from a manager.", "Stop working until the gap is fixed by others."] },
+        "P9": { sjt: ["I proactively step forward, own the mistake, and propose the fix.", "I fix the mistake quietly and mention it later if asked.", "I fix it silently and hope nobody brings it up.", "I let it go and blame the system if I am questioned."], rnk: ["Publicly own the error immediately.", "Fix the error quietly but admit it if asked.", "Cover up the error to avoid trouble.", "Deflect blame to circumstances."] },
+        "P10": { sjt: ["I ignore 'gut feelings' and rigorously strip down the raw data to find the root cause.", "I use a mix of data analysis and my past experience.", "I rely mostly on my intuition and familiarity with the system.", "I guess the most likely cause to save time."], rnk: ["Rigorously analyze the raw data.", "Blend statistics with personal experience.", "Rely heavily on seasoned intuition.", "Make a rapid, educated guess."] },
+        "P11": { sjt: ["I immediately map out how this small change ripples across the entire enterprise.", "I consider how it affects my immediate adjoining departments.", "I focus only on how it changes my team's specific workflow.", "I just follow the new routine without overthinking it."], rnk: ["Analyze the enterprise-wide systemic impact.", "Consider the effect on neighboring teams.", "Focus strictly on local workflow changes.", "Implement the change without overthinking."] },
+        "P12": { sjt: ["I brainstorm radically unconventional, out-of-the-box solutions.", "I look at how other industries might solve this and adapt it.", "I safely tweak the existing standard method to see if it helps.", "I keep reapplying the standard method, assuming it will eventually work."], rnk: ["Propose radical, unconventional ideas.", "Adapt solutions from outside the department.", "Make safe, incremental tweaks.", "Strictly reapply the standard method."] },
+        "P13": { sjt: ["I deploy a fast, practical, 80%-perfect fix to keep things moving.", "I implement a temporary patch while planning the perfect solution.", "I delay the deadline to ensure the solution is 100% flawless.", "I refuse to act until the perfect, textbook solution is available."], rnk: ["Deploy a fast, practical 80% fix.", "Use a temporary patch to buy time.", "Delay the work to build a perfect solution.", "Refuse to proceed without the textbook answer."] },
+        "P14": { sjt: ["I completely suppress my anger and reply with cold, objective facts.", "I sleep on it before sending a measured response.", "I immediately fire back a defensive reply explaining why they are wrong.", "I angrily confront them in person right away."], rnk: ["Reply purely with objective, emotionless facts.", "Delay the response until I have cooled down.", "Fire back a defensive email immediately.", "Confront them aggressively right away."] },
+        "P15": { sjt: ["I rigorously map out every single step in a detailed sequence before starting.", "I write a loose plan and adjust it as I go.", "I jump straight in and figure things out on the fly.", "I tackle whatever piece is in front of me with zero planning."], rnk: ["Map out a rigorous, step-by-step sequence.", "Create a loose, flexible outline.", "Jump straight in and figure it out.", "Tackle random pieces with zero planning."] },
+        "P16": { sjt: ["I maintain absolute, icy composure and tackle them systematically.", "I feel the stress but manage to keep my head down and work.", "I become visibly flustered and struggle to focus on one thing.", "I panic, freeze up, and immediately call for someone else to take over."], rnk: ["Maintain absolute, icy composure.", "Acknowledge the stress but keep working.", "Become visibly flustered and distracted.", "Panic and immediately hand over control."] }
+     };
+     
+     const wpi = wpiScenarios[construct];
      if (wpi) {
         if (item.type === "SJT") {
-           cleanedOptions = [
-             { k: "A", t: wpi.sjt[0] }, { k: "B", t: wpi.sjt[1] },
-             { k: "C", t: wpi.sjt[2] }, { k: "D", t: wpi.sjt[3] }
-           ];
+           cleanedOptions = [ { k: "A", t: wpi.sjt[0] }, { k: "B", t: wpi.sjt[1] }, { k: "C", t: wpi.sjt[2] }, { k: "D", t: wpi.sjt[3] } ];
         } else if (item.type === "RNK") {
-           cleanedOptions = [
-             { k: "A", t: wpi.rnk[0] }, { k: "B", t: wpi.rnk[1] },
-             { k: "C", t: wpi.rnk[2] }, { k: "D", t: wpi.rnk[3] }
-           ];
+           cleanedOptions = [ { k: "A", t: wpi.rnk[0] }, { k: "B", t: wpi.rnk[1] }, { k: "C", t: wpi.rnk[2] }, { k: "D", t: wpi.rnk[3] } ];
         }
      } else {
-        // Fallback only if WPI is missing
         if (item.type === "SJT") {
-           cleanedOptions = [
-             { k: "A", t: "Act according to my natural preference and leverage my strengths." },
-             { k: "B", t: "Adapt my behaviour slightly, but rely mostly on my standard approach." },
-             { k: "C", t: "Suppress my natural style entirely to match what others are doing." },
-             { k: "D", t: "Avoid the situation because it does not fit my preferred working style." }
-           ];
+           cleanedOptions = [ { k: "A", t: "Act according to my natural preference and leverage my strengths." }, { k: "B", t: "Adapt my behaviour slightly, but rely mostly on my standard approach." }, { k: "C", t: "Suppress my natural style entirely to match what others are doing." }, { k: "D", t: "Avoid the situation because it does not fit my preferred working style." } ];
         } else if (item.type === "RNK") {
-           cleanedOptions = [
-             { k: "A", t: "Ensure my natural strengths are fully utilized in the process." },
-             { k: "B", t: "Find a middle ground between my personal style and the team's needs." },
-             { k: "C", t: "Change my approach entirely to make others more comfortable." },
-             { k: "D", t: "Step back and let others handle the aspects I dislike." }
-           ];
+           cleanedOptions = [ { k: "A", t: "Ensure my natural strengths are fully utilized in the process." }, { k: "B", t: "Find a middle ground between my personal style and the team's needs." }, { k: "C", t: "Change my approach entirely to make others more comfortable." }, { k: "D", t: "Step back and let others handle the aspects I dislike." } ];
         }
      }
   }
@@ -296,9 +298,27 @@ function composeStem(item, dept, gradeTier, construct) {
       return bank[dept][anchor][0].text + clause;
     }
     
+    // BAKED-IN 16 UNIQUE PERSONALITY SITUATIONS
     if (construct.startsWith("P")) {
-       const wpi = typeof WPI_SCENARIOS !== 'undefined' ? WPI_SCENARIOS[construct] : null;
-       const stemText = wpi ? wpi.s : "A complex situation arises that challenges your natural working style.";
+       const wpiStems = {
+          "P1": "A project requires you to choose between highly collaborative team workshops or isolated desk work.",
+          "P2": "You are placed in a room full of external stakeholders and colleagues you have never met before.",
+          "P3": "You have to present an update on a highly complex, technical issue to leadership.",
+          "P4": "A stakeholder strongly insists on a decision that you believe is fundamentally flawed.",
+          "P5": "A sudden setback completely derails your team's progress for the week.",
+          "P6": "You encounter an ambiguous problem where the standard policy is unclear.",
+          "P7": "You notice that a mandatory, standard operating procedure is highly inefficient.",
+          "P8": "You lack a critical piece of information needed to finish an urgent task.",
+          "P9": "A minor error you made causes a delay, but nobody has noticed it was you yet.",
+          "P10": "You are asked to make a call on a recurring fault that experts can't figure out.",
+          "P11": "Your department is implementing a minor change to a daily routine.",
+          "P12": "You are tasked with fixing a stubborn issue that standard methods haven't resolved.",
+          "P13": "You are under a tight deadline and need a solution immediately.",
+          "P14": "A colleague sends you a highly unfair, passive-aggressive email copying your boss.",
+          "P15": "You are assigned a large, chaotic, multi-stage project.",
+          "P16": "Three massive, critical issues blow up at the exact same time."
+       };
+       const stemText = wpiStems[construct] || "A complex situation arises that challenges your natural working style.";
        return `You are working in the ${dept} department. ` + stemText + clause;
     }
 
@@ -309,7 +329,6 @@ function composeStem(item, dept, gradeTier, construct) {
   if (item.type === "IFC" || item.type === "RCL" || item.type === "BFS") {
      const wpiBank = typeof WPI_POOLS !== 'undefined' ? WPI_POOLS[construct] : null;
      if(wpiBank && wpiBank[ctxClass] && wpiBank[ctxClass].length > 0) {
-        // Prevent repetition of statements by cycling them
         const stepIndex = (typeof S !== 'undefined' && S !== null) ? S.i : Math.floor(Math.random() * 3);
         const randIndex = stepIndex % wpiBank[ctxClass].length;
         const statement = wpiBank[ctxClass][randIndex].text;
