@@ -3375,6 +3375,89 @@ const WPI_POOLS = {
   }
 };
 
+const WPI_SCENARIOS = {
+  "P1": {
+    s: "A project requires you to choose between highly collaborative team workshops or isolated desk work.",
+    sjt: ["I heavily favor the team workshops to stay energized.", "I split my time but lean toward the group sessions.", "I attend the workshops but prefer working independently.", "I isolate myself to focus entirely on the deep work."],
+    rnk: ["Maximize group collaboration time.", "Balance team meetings with solo work.", "Keep team interactions strictly to required updates.", "Eliminate meetings to focus on independent tasks."]
+  },
+  "P2": {
+    s: "You are placed in a room full of external stakeholders and colleagues you have never met before.",
+    sjt: ["I immediately walk up to strangers and break the ice.", "I look for a small group to introduce myself to.", "I wait for a natural moment to join an ongoing conversation.", "I wait for others to approach me first."],
+    rnk: ["Proactively break the ice with strangers.", "Warmly participate when introduced.", "Observe the group dynamics silently.", "Avoid unnecessary small talk entirely."]
+  },
+  "P3": {
+    s: "You have to present an update on a highly complex, technical issue to leadership.",
+    sjt: ["I distill it into a sharp, jargon-free executive summary.", "I highlight the main points but keep the technical data ready.", "I walk them through the detailed technical progression.", "I provide all the raw data so they can see exactly what happened."],
+    rnk: ["Deliver a punchy, high-level summary.", "Provide a balanced mix of summary and detail.", "Walk through the full technical timeline.", "Present all raw data and specifications."]
+  },
+  "P4": {
+    s: "A stakeholder strongly insists on a decision that you believe is fundamentally flawed.",
+    sjt: ["I firmly and directly challenge their position with my reasoning.", "I express my concerns politely but look for a compromise.", "I document my disagreement but go along with their decision.", "I quietly accept their decision to avoid creating friction."],
+    rnk: ["Assertively challenge the flawed decision.", "Attempt to negotiate a safer middle ground.", "Formally log my concerns but comply.", "Yield to their authority without arguing."]
+  },
+  "P5": {
+    s: "A sudden setback completely derails your team's progress for the week.",
+    sjt: ["I immediately focus on the positives and rally the team's energy.", "I acknowledge the hit but pivot quickly to the recovery plan.", "I focus strictly on the cold facts of what went wrong.", "I point out that I expected things to go wrong eventually."],
+    rnk: ["Actively boost the team's morale.", "Pivot immediately to practical recovery.", "Analyze the failure mechanically.", "Express frustration about the wasted effort."]
+  },
+  "P6": {
+    s: "You encounter an ambiguous problem where the standard policy is unclear.",
+    sjt: ["I make a firm judgment call on my own and act immediately.", "I decide on a course of action but briefly notify my manager.", "I draft a proposal and wait for my manager to formally approve it.", "I stop working and immediately escalate it to leadership for a decision."],
+    rnk: ["Take autonomous action immediately.", "Act first, then inform management.", "Propose a fix and wait for approval.", "Halt work and escalate the issue."]
+  },
+  "P7": {
+    s: "You notice that a mandatory, standard operating procedure is highly inefficient.",
+    sjt: ["I actively challenge the procedure and push to implement a better way.", "I suggest an improvement to the process owner for review.", "I grumble about the inefficiency but follow the rule exactly.", "I strictly obey the procedure without questioning it."],
+    rnk: ["Aggressively push to change the rule.", "Suggest a formal process update.", "Follow the rule while noting its flaws.", "Comply with the standard blindly."]
+  },
+  "P8": {
+    s: "You lack a critical piece of information needed to finish an urgent task.",
+    sjt: ["I exhaust every possible workaround and data source myself to figure it out.", "I spend some time digging before asking a colleague.", "I immediately ask my supervisor where to find the data.", "I halt the task entirely until the information is handed to me."],
+    rnk: ["Improvise and exhaust all personal resources.", "Search briefly before asking for help.", "Immediately request guidance from a manager.", "Stop working until the gap is fixed by others."]
+  },
+  "P9": {
+    s: "A minor error you made causes a delay, but nobody has noticed it was you yet.",
+    sjt: ["I proactively step forward, own the mistake, and propose the fix.", "I fix the mistake quietly and mention it later if asked.", "I fix it silently and hope nobody brings it up.", "I let it go and blame the system if I am questioned."],
+    rnk: ["Publicly own the error immediately.", "Fix the error quietly but admit it if asked.", "Cover up the error to avoid trouble.", "Deflect blame to circumstances."]
+  },
+  "P10": {
+    s: "You are asked to make a call on a recurring fault that experts can't figure out.",
+    sjt: ["I ignore 'gut feelings' and rigorously strip down the raw data to find the root cause.", "I use a mix of data analysis and my past experience.", "I rely mostly on my intuition and familiarity with the system.", "I guess the most likely cause to save time."],
+    rnk: ["Rigorously analyze the raw data.", "Blend statistics with personal experience.", "Rely heavily on seasoned intuition.", "Make a rapid, educated guess."]
+  },
+  "P11": {
+    s: "Your department is implementing a minor change to a daily routine.",
+    sjt: ["I immediately map out how this small change ripples across the entire enterprise.", "I consider how it affects my immediate adjoining departments.", "I focus only on how it changes my team's specific workflow.", "I just follow the new routine without overthinking it."],
+    rnk: ["Analyze the enterprise-wide systemic impact.", "Consider the effect on neighboring teams.", "Focus strictly on local workflow changes.", "Implement the change without overthinking."]
+  },
+  "P12": {
+    s: "You are tasked with fixing a stubborn issue that standard methods haven't resolved.",
+    sjt: ["I brainstorm radically unconventional, out-of-the-box solutions.", "I look at how other industries might solve this and adapt it.", "I safely tweak the existing standard method to see if it helps.", "I keep reapplying the standard method, assuming it will eventually work."],
+    rnk: ["Propose radical, unconventional ideas.", "Adapt solutions from outside the department.", "Make safe, incremental tweaks.", "Strictly reapply the standard method."]
+  },
+  "P13": {
+    s: "You are under a tight deadline and need a solution immediately.",
+    sjt: ["I deploy a fast, practical, 80%-perfect fix to keep things moving.", "I implement a temporary patch while planning the perfect solution.", "I delay the deadline to ensure the solution is 100% flawless.", "I refuse to act until the perfect, textbook solution is available."],
+    rnk: ["Deploy a fast, practical 80% fix.", "Use a temporary patch to buy time.", "Delay the work to build a perfect solution.", "Refuse to proceed without the textbook answer."]
+  },
+  "P14": {
+    s: "A colleague sends you a highly unfair, passive-aggressive email copying your boss.",
+    sjt: ["I completely suppress my anger and reply with cold, objective facts.", "I sleep on it before sending a measured response.", "I immediately fire back a defensive reply explaining why they are wrong.", "I angrily confront them in person right away."],
+    rnk: ["Reply purely with objective, emotionless facts.", "Delay the response until I have cooled down.", "Fire back a defensive email immediately.", "Confront them aggressively right away."]
+  },
+  "P15": {
+    s: "You are assigned a large, chaotic, multi-stage project.",
+    sjt: ["I rigorously map out every single step in a detailed sequence before starting.", "I write a loose plan and adjust it as I go.", "I jump straight in and figure things out on the fly.", "I tackle whatever piece is in front of me with zero planning."],
+    rnk: ["Map out a rigorous, step-by-step sequence.", "Create a loose, flexible outline.", "Jump straight in and figure it out.", "Tackle random pieces with zero planning."]
+  },
+  "P16": {
+    s: "Three massive, critical issues blow up at the exact same time.",
+    sjt: ["I maintain absolute, icy composure and tackle them systematically.", "I feel the stress but manage to keep my head down and work.", "I become visibly flustered and struggle to focus on one thing.", "I panic, freeze up, and immediately call for someone else to take over."],
+    rnk: ["Maintain absolute, icy composure.", "Acknowledge the stress but keep working.", "Become visibly flustered and distracted.", "Panic and immediately hand over control."]
+  }
+};
+
 
 
 function getGradeAnchor(tier, construct, dept) {
