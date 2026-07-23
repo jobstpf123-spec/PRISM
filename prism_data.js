@@ -3483,15 +3483,15 @@ function getGradeClause(tier) {
 }
 
 function composeFullScenario(item, construct, dept) { return composeStem(item, dept, 4, construct); }
-function composeFullOptions(item, construct, dept) {
+function composeFullOptions(item, construct, dept) { 
   let cleanedOptions = item.options.map(opt => {
     return { k: opt.k, t: opt.t.replace(/> /g, "").replace(/ >/g, "").replace(/>/g, "").trim() };
   });
 
   if (construct.startsWith("P")) {
-     const wpi = WPI_SCENARIOS[construct];
+     // Pull the unique scenarios
+     const wpi = typeof WPI_SCENARIOS !== 'undefined' ? WPI_SCENARIOS[construct] : null;
      if (wpi) {
-        // PULL UNIQUE OPTIONS FOR EVERY TRAIT
         if (item.type === "SJT") {
            cleanedOptions = [
              { k: "A", t: wpi.sjt[0] }, { k: "B", t: wpi.sjt[1] },
@@ -3504,7 +3504,7 @@ function composeFullOptions(item, construct, dept) {
            ];
         }
      } else {
-        // FALLBACK ONLY IF MISSING
+        // Fallback only if WPI is missing
         if (item.type === "SJT") {
            cleanedOptions = [
              { k: "A", t: "Act according to my natural preference and leverage my strengths." },
@@ -3522,36 +3522,53 @@ function composeFullOptions(item, construct, dept) {
         }
      }
   }
-  return cleanedOptions;
+  return cleanedOptions; 
+}
+
+function getGradeAnchor(tier, construct, dept) {
+  const targetMap = {1:"E1", 2:"E2", 3:"E3", 4:"M1", 5:"M1", 6:"M2", 7:"M4", 8:"M4"};
+  let target = targetMap[tier] || "E1";
+  const bank = typeof ANCHOR_BANK !== 'undefined' ? ANCHOR_BANK[construct] : null;
+  if (bank && bank[dept] && !bank[dept][target]) {
+    return tier <= 3 ? "E1" : "M4";
+  }
+  return target;
+}
+
+function getGradeClause(tier) {
+  if (tier === 1 || tier === 8) return "";
+  if (tier === 2 || tier === 3) return " You need to resolve this swiftly on your shift.";
+  if (tier === 4 || tier === 5) return " Multiple people rely on your managerial guidance here.";
+  if (tier === 6 || tier === 7) return " This requires careful cross-functional alignment and sets a precedent.";
+  return "";
 }
 
 function composeStem(item, dept, gradeTier, construct) {
-  const ctxClass = DEPT_CONTEXT_CLASS[dept] || "professional";
-  const anchor = getGradeAnchor(gradeTier, construct, dept);
+  const ctxClass = typeof DEPT_CONTEXT_CLASS !== 'undefined' ? (DEPT_CONTEXT_CLASS[dept] || "professional") : "professional";
+  const anchor = getGradeAnchor(gradeTier, construct, dept); 
   let clause = getGradeClause(gradeTier);
 
   if (item.type === "SJT" || item.type === "RNK") {
-    const bank = ANCHOR_BANK[construct];
+    const bank = typeof ANCHOR_BANK !== 'undefined' ? ANCHOR_BANK[construct] : null;
     if (bank && bank[dept] && bank[dept][anchor]) {
       if (["E2", "E3", "M1", "M2"].includes(anchor)) clause = "";
       return bank[dept][anchor][0].text + clause;
     }
     
-    // UNIQUE PERSONALITY STEMS
     if (construct.startsWith("P")) {
-       const wpi = WPI_SCENARIOS[construct];
+       const wpi = typeof WPI_SCENARIOS !== 'undefined' ? WPI_SCENARIOS[construct] : null;
        const stemText = wpi ? wpi.s : "A complex situation arises that challenges your natural working style.";
        return `You are working in the ${dept} department. ` + stemText + clause;
     }
 
     let cleanedOldStem = item.stem.replace(/^You are working in[^.]+\.\s*/i, "");
-    return `You are working in the ${dept} department. ` + cleanedOldStem.replace(/> /g, "").replace(/>/g, "") + clause;
+    return `You are working in the ${dept} department. ` + cleanedOldStem.replace(/> /g, "").replace(/>/g, "") + clause; 
   }
 
   if (item.type === "IFC" || item.type === "RCL" || item.type === "BFS") {
-     const wpiBank = WPI_POOLS[construct];
+     const wpiBank = typeof WPI_POOLS !== 'undefined' ? WPI_POOLS[construct] : null;
      if(wpiBank && wpiBank[ctxClass] && wpiBank[ctxClass].length > 0) {
-        // PREVENT REPETITION: Cycle through the 3 available statements using the step index!
+        // Prevent repetition of statements by cycling them
         const stepIndex = (typeof S !== 'undefined' && S !== null) ? S.i : Math.floor(Math.random() * 3);
         const randIndex = stepIndex % wpiBank[ctxClass].length;
         const statement = wpiBank[ctxClass][randIndex].text;
@@ -3563,6 +3580,8 @@ function composeStem(item, dept, gradeTier, construct) {
   }
   return item.stem.replace(/> /g, "").replace(/>/g, "");
 }
+
+
 
 
 /* =========================================================================================
