@@ -3482,53 +3482,79 @@ function getGradeClause(tier) {
 }
 
 function composeFullScenario(item, construct, dept) { return composeStem(item, dept, 4, construct); }
-function composeFullOptions(item, construct, dept) { 
+function composeFullOptions(item, construct, dept) {
   let cleanedOptions = item.options.map(opt => {
     return { k: opt.k, t: opt.t.replace(/> /g, "").replace(/ >/g, "").replace(/>/g, "").trim() };
   });
 
-  if (item.type === "SJT" && construct.startsWith("P")) {
-     cleanedOptions = [
-       { k: "A", t: "Act according to my natural preference and leverage my strengths." },
-       { k: "B", t: "Adapt my behaviour slightly, but rely mostly on my standard approach." },
-       { k: "C", t: "Suppress my natural style entirely to match what others are doing." },
-       { k: "D", t: "Avoid the situation because it does not fit my preferred working style." }
-     ];
+  if (construct.startsWith("P")) {
+     const wpi = WPI_SCENARIOS[construct];
+     if (wpi) {
+        // PULL UNIQUE OPTIONS FOR EVERY TRAIT
+        if (item.type === "SJT") {
+           cleanedOptions = [
+             { k: "A", t: wpi.sjt[0] }, { k: "B", t: wpi.sjt[1] },
+             { k: "C", t: wpi.sjt[2] }, { k: "D", t: wpi.sjt[3] }
+           ];
+        } else if (item.type === "RNK") {
+           cleanedOptions = [
+             { k: "A", t: wpi.rnk[0] }, { k: "B", t: wpi.rnk[1] },
+             { k: "C", t: wpi.rnk[2] }, { k: "D", t: wpi.rnk[3] }
+           ];
+        }
+     } else {
+        // FALLBACK ONLY IF MISSING
+        if (item.type === "SJT") {
+           cleanedOptions = [
+             { k: "A", t: "Act according to my natural preference and leverage my strengths." },
+             { k: "B", t: "Adapt my behaviour slightly, but rely mostly on my standard approach." },
+             { k: "C", t: "Suppress my natural style entirely to match what others are doing." },
+             { k: "D", t: "Avoid the situation because it does not fit my preferred working style." }
+           ];
+        } else if (item.type === "RNK") {
+           cleanedOptions = [
+             { k: "A", t: "Ensure my natural strengths are fully utilized in the process." },
+             { k: "B", t: "Find a middle ground between my personal style and the team's needs." },
+             { k: "C", t: "Change my approach entirely to make others more comfortable." },
+             { k: "D", t: "Step back and let others handle the aspects I dislike." }
+           ];
+        }
+     }
   }
-  if (item.type === "RNK" && construct.startsWith("P")) {
-     cleanedOptions = [
-       { k: "A", t: "Ensure my natural strengths are fully utilized in the process." },
-       { k: "B", t: "Find a middle ground between my personal style and the team's needs." },
-       { k: "C", t: "Change my approach entirely to make others more comfortable." },
-       { k: "D", t: "Step back and let others handle the aspects I dislike." }
-     ];
-  }
-  return cleanedOptions; 
+  return cleanedOptions;
 }
 
 function composeStem(item, dept, gradeTier, construct) {
   const ctxClass = DEPT_CONTEXT_CLASS[dept] || "professional";
-  const anchor = getGradeAnchor(gradeTier, construct, dept); // UPGRADED TO SMART ROUTING
+  const anchor = getGradeAnchor(gradeTier, construct, dept);
   let clause = getGradeClause(gradeTier);
 
   if (item.type === "SJT" || item.type === "RNK") {
     const bank = ANCHOR_BANK[construct];
     if (bank && bank[dept] && bank[dept][anchor]) {
-      // If an exact intermediate grade exists, we drop the generic clause to make it pure!
-      if (["E2", "E3", "M1", "M2"].includes(anchor)) clause = ""; 
+      if (["E2", "E3", "M1", "M2"].includes(anchor)) clause = "";
       return bank[dept][anchor][0].text + clause;
     }
+    
+    // UNIQUE PERSONALITY STEMS
     if (construct.startsWith("P")) {
-       return `You are working in the ${dept} department. A complex situation arises that challenges your natural working style.` + clause;
+       const wpi = WPI_SCENARIOS[construct];
+       const stemText = wpi ? wpi.s : "A complex situation arises that challenges your natural working style.";
+       return `You are working in the ${dept} department. ` + stemText + clause;
     }
+
     let cleanedOldStem = item.stem.replace(/^You are working in[^.]+\.\s*/i, "");
-    return `You are working in the ${dept} department. ` + cleanedOldStem.replace(/> /g, "").replace(/>/g, "") + clause; 
+    return `You are working in the ${dept} department. ` + cleanedOldStem.replace(/> /g, "").replace(/>/g, "") + clause;
   }
-  
+
   if (item.type === "IFC" || item.type === "RCL" || item.type === "BFS") {
      const wpiBank = WPI_POOLS[construct];
      if(wpiBank && wpiBank[ctxClass] && wpiBank[ctxClass].length > 0) {
-        const statement = wpiBank[ctxClass][0].text;
+        // PREVENT REPETITION: Cycle through the 3 available statements using the step index!
+        const stepIndex = (typeof S !== 'undefined' && S !== null) ? S.i : Math.floor(Math.random() * 3);
+        const randIndex = stepIndex % wpiBank[ctxClass].length;
+        const statement = wpiBank[ctxClass][randIndex].text;
+        
         if (item.type === "IFC") return `Which is MOST and LEAST like you? "${statement}"`;
         if (item.type === "RCL") return `To what extent do you agree? "${statement}"`;
         if (item.type === "BFS") return `How often do you do this? "${statement}"`;
